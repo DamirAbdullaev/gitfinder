@@ -1,30 +1,39 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <div>
+    <nav-bar />
+    <search-module />
+    <user-info-module v-if="user" />
+    <sort-repos v-if="user" />
+    <repos-name v-if="user && activeButton == 'name'" />
+    <repos-stars v-if="user && activeButton == 'stars'" />
+    <repos-date v-if="user && activeButton == 'date'" />
+
+    <div v-else-if="name && !user" class="loader__box">
+      <div class="loader"></div>
+    </div>
+  </div>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import NavBar from './components/NavBar.vue'
+import ReposName from './components/ReposName.vue'
+import SearchModule from './components/SearchModule.vue'
+import SortRepos from './components/SortRepos.vue'
+import UserInfoModule from './components/UserInfoModule.vue'
+import ReposStars from './components/ReposStars.vue'
+import ReposDate from './components/ReposDate.vue'
 
-nav {
-  padding: 30px;
+import { mapState } from 'vuex'
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
 
-    &.router-link-exact-active {
-      color: #42b983;
+  export default {
+    components: { NavBar, SearchModule, UserInfoModule, SortRepos, ReposName, ReposStars, ReposDate },
+
+    computed: {
+      ...mapState(['user']),
+      ...mapState(['name']),
+      ...mapState(['activeButton']),
     }
   }
-}
-</style>
+</script>
+
